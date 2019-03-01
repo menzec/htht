@@ -1,0 +1,80 @@
+开始安装：
+  1.由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本：
+    sudo apt-get remove docker docker-engine docker-ce docker.io
+  2.产生一个要更新的软件包的签名文件，安装以下包以使apt可以通过HTTPS使用存储库（repository）：
+    sudo apt-offline set  docker-request.sig --update --upgrade  --install-packages apt-transport-https ca-certificates curl software-properties-common
+     3.下载我们需要的软件包，并打包成pkgs.zip。然后把pkgs.zip拷贝到有网络机器
+    apt-offline get ./docker-request.sig -t 2 --bundle pkgs.zip
+  4.在无网络机器上，离线安装软件包pkgs.zip：
+    sudo apt-get clean
+    sudo apt-offline install ./pkgs.zip
+    sudo dpkg --install /var/cache/apt/archives/*.deb
+  5.sudo apt-offline set docker-ce01.sig --update --upgrade --install-packages docker-ce
+  6.sudo apt-offline get ./docker-ce01.sig --bundle docker-01.zip
+  7.sudo apt-offline install ./docker.zip
+  8.system("sudo apt-get -f install")
+  9.
+换思路：
+  1.下载各种安装包，用Python脚本安装（docker-engine）
+  2.docker pull 遇到问题
+  3.安装cuda时遇到问题，
+
+
+
+安装docker
+https://blog.csdn.net/dahuzix/article/details/79997881
+
+安装cuda
+https://github.com/NVIDIA/nvidia-docker
+The list of prerequisites for running nvidia-docker 2.0 is described below.
+For information on how to install Docker for your Linux distribution, please refer to the Docker documentation.
+
+    GNU/Linux x86_64 with kernel version > 3.10
+    Docker >= 1.12
+    NVIDIA GPU with Architecture > Fermi (2.1)
+    NVIDIA drivers ~= 361.93 (untested on older versions)
+
+Your driver version might limit your CUDA capabilities (see CUDA requirements)
+Running a CUDA container requires a machine with at least one CUDA-capable GPU and a driver compatible with the CUDA toolkit version you are using.
+The machine running the CUDA container only requires the NVIDIA driver, the CUDA toolkit doesn't have to be installed.
+
+NVIDIA drivers are backward-compatible with CUDA toolkits versions
+CUDA toolkit version 	Driver version 	GPU architecture
+6.5 	>= 340.29 	>= 2.0 (Fermi)
+7.0 	>= 346.46 	>= 2.0 (Fermi)
+7.5 	>= 352.39 	>= 2.0 (Fermi)
+8.0 	== 361.93 or >= 375.51 	== 6.0 (P100)
+8.0 	>= 367.48 	>= 2.0 (Fermi)
+9.0 	>= 384.81 	>= 3.0 (Kepler)
+9.1 	>= 387.26 	>= 3.0 (Kepler)
+9.2 	>= 396.26 	>= 3.0 (Kepler)
+10.0 	>= 384.130, < 385.00 	Tesla GPUs
+10.0 	>= 410.48 	>= 3.0 (Kepler)
+
+
+docker: Error response from daemon: Unknown runtime specified nvidia. 解决方法
+1.
+  sudo mkdir -p /etc/systemd/system/docker.service.d
+  sudo tee /etc/systemd/system/docker.service.d/override.conf <<EOF
+  [Service]
+  ExecStart=
+  ExecStart=/usr/bin/dockerd --host=fd:// --add-runtime=nvidia=/usr/bin/nvidia-container-runtime
+  EOF
+  sudo systemctl daemon-reload
+  sudo systemctl restart docker
+
+  Daemon configuration file
+2.
+  sudo tee /etc/docker/daemon.json <<EOF
+  {
+      "runtimes": {
+          "nvidia": {
+              "path": "/usr/bin/nvidia-container-runtime",
+              "runtimeArgs": []
+          }
+      }
+  }
+  EOF
+  sudo pkill -SIGHUP dockerd
+
+再去开启镜像

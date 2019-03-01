@@ -1,0 +1,26 @@
+<annotation verified="no">
+  <folder>&#26032;&#24314;&#25991;&#20214;&#22841;&#65288;600&#215;600&#65289;</folder>
+  <filename>dingxing_531</filename>
+  <path>D:\000&#28165;&#22235;&#20081;&#25972;&#29702;&#25968;&#25454;\&#20081;&#24314;\&#23567;&#26679;&#26412;\&#26032;&#24314;&#25991;&#20214;&#22841;&#65288;600&#215;600&#65289;(1)\&#26032;&#24314;&#25991;&#20214;&#22841;&#65288;600&#215;600&#65289;\dingxing_531.jpg</path>
+  <source>
+    <database>Unknown</database>
+  </source>
+  <size>
+    <width>600</width>
+    <height>600</height>
+    <depth>3</depth>
+  </size>
+  <segmented>0</segmented>
+  <object>
+    <name>weijian</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>8</xmin>
+      <ymin>259</ymin>
+      <xmax>69</xmax>
+      <ymax>302</ymax>
+    </bndbox>
+  </object>
+</annotation>
