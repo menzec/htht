@@ -1,0 +1,26 @@
+docker 离线安装中的各种坑
+1.下载离线安装包时各种包依赖解决办法：
+  参考链接：https://blog.csdn.net/q919683527/article/details/80418593
+  1）下载离线包
+    首先清空电脑的/var/cacah/apt/archiver 文件夹下的*.deb文件
+    sudo apt-get -d install docker
+  --2)生成依赖关系...
+  2）将deb包拷贝到新电脑，python deb-install.py 脚本循环安装每个×.deb，直到所有安装完成
+
+2.python 环境配置问题
+  anaconda + docker环境
+  指定anaconda默认的python版本，不用新建环境：conda install python=3.6.4
+  batch_download.py 可以避免pip install -r requiremet.txt 安装时出错就停止的问题
+  ubuntu 安装gdal opencv时需要先安装系统对应的C++依赖包
+
+3.Cuda问题
+  Cuda 并不是在所有显卡上都能够成功安装，cuda 在具有一定计算能及的显卡上才能够成功安装，如果显卡不支持，安装不成功的表现是一些链接库不能解压出来。
+  在1030等不能成功安装cuda的机器上需要拷贝一份cuda的安装包
+  实际上nvidia-docker中不需要安装cuda-cudnn
+  TensorFlow需要cuda的安装完全，否则在import 的时候不成功
+
+4.在docker中安装ubuntu的基本工具
+  vim、git、lrzsz、ssh、ifconfig、telnet、ping等命令
+
+5.docker使用问题
+  docker 同一个容器打开两个bash，docker exec container ID /bin/bash
